@@ -50,9 +50,10 @@ jobs:
 
     - name: Add preprocessing output file, commit and push changes
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       run: |
         git add -f preprocessing/heart_preprocessed.csv
         git status
         git commit -m "Add/update heart_preprocessed.csv after preprocessing" || echo "No changes to commit"
-        git push origin main || echo "Nothing to push"
+        # Push menggunakan PAT dengan format URL termasuk token
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis.git HEAD:main
