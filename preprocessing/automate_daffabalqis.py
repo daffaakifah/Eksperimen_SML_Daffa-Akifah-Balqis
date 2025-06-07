@@ -30,6 +30,6 @@ if __name__ == "__main__":
     input_path = "heart.csv"  # atau folder/heart.csv yang sesuai lokasi file
     output_path = "preprocessing/heart_preprocessed.csv"
     df_preprocessed.to_csv(output_path, index=False)
-    print(f"Hasil preprocessing tersimpan di: {output_path}")
+    print("Hasil preprocessing tersimpan.")
 
 
