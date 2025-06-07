@@ -27,9 +27,15 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
     return df_processed
 
 if __name__ == "__main__":
-    input_path = "heart.csv"  # atau folder/heart.csv yang sesuai lokasi file
+    input_path = "heart.csv"  # Path dataset raw
     output_path = "preprocessing/heart_preprocessed.csv"
+
+    # Panggil fungsi preprocess_data, dapatkan dataframe hasil preprocessing
+    df_preprocessed = preprocess_data(input_path)
+
+    # Simpan dataframe hasil preprocessing ke file CSV
     df_preprocessed.to_csv(output_path, index=False)
-    print("Hasil preprocessing tersimpan.")
+    print(f"Hasil preprocessing tersimpan di: {output_path}")
+
 
 
