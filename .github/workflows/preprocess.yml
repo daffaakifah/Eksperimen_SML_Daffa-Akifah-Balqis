@@ -39,17 +39,28 @@ jobs:
       - name: Show files in preprocessing folder
         run: ls -la preprocessing
 
-      - name: Show git status
-        run: git status
+      # ** Tambahan steps pengecekan file, status git, commit dan push **
+      - name: Check preprocessed file existence and show some content
+        run: |
+          if [ -f preprocessing/heart_preprocessed.csv ]; then
+            echo "Preprocessed file found."
+            ls -l preprocessing/heart_preprocessed.csv
+            head -n 5 preprocessing/heart_preprocessed.csv
+          else
+            echo "Preprocessed file NOT found!"
+            exit 1
+          fi
 
-      - name: Show staged files before commit
-        run: git diff --staged --name-only
+      - name: Show git status and staged files before commit
+        run: |
+          git status
+          git diff --name-only --cached
 
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add preprocessing/heart_preprocessed.csv
+          git add -f preprocessing/heart_preprocessed.csv
           git status
           git commit -m "Update preprocessed dataset from workflow" || echo "No changes to commit"
           git push || echo "No changes to push"
