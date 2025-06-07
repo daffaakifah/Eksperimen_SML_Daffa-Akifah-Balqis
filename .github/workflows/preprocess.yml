@@ -13,10 +13,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Penting untuk operasi git berikutnya
+          fetch-depth: 0  
 
       - name: Download Dataset
         run: |
+          mkdir -p preprocessing 
           curl -o preprocessing/heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
 
       - name: Setup Python
@@ -29,22 +30,32 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
-        working-directory: ./preprocessing 
+        working-directory: ./preprocessing
         run: |
+          echo "Isi folder sebelum preprocessing:"
+          ls -l
           python automate_daffabalqis.py
+          echo "Isi folder setelah preprocessing:"
+          ls -l
 
       - name: Verify processed file
         run: |
           echo "Isi folder preprocessing:"
           ls -lh preprocessing/
-          [ -f preprocessing/heart_preprocessed.csv ] || exit 1
+          if [ -f preprocessing/heart_preprocessed.csv ]; then
+            echo "File ditemukan!"
+          else
+            echo "ERROR: File heart_preprocessed.csv tidak ditemukan!"
+            echo "Mencari file di seluruh repo:"
+            find . -name heart_preprocessed.csv
+            exit 1
+          fi
 
       - name: Commit changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add preprocessing/
-          git status
+          git add preprocessing/heart_preprocessed.csv
           git commit -m "Add preprocessed dataset" || echo "No changes to commit"
 
       - name: Push changes
@@ -52,4 +63,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-          force: true
