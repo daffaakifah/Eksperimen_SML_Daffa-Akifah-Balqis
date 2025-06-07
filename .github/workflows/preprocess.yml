@@ -15,7 +15,7 @@ jobs:
 
       - name: Download Dataset
         run: |
-          curl -o heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/refs/heads/main/heart.csv"
+          curl -o heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
 
       - name: Setup Python 3.12.7
         uses: actions/setup-python@v4
@@ -28,7 +28,7 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
-        run: python "/home/runner/work/Eksperimen_SML_Daffa-Akifah-Balqis/Eksperimen_SML_Daffa-Akifah-Balqis/Eksperimen_SML_DaffaAkifahBalqis/preprocessing/automate_daffabalqis.py"
+        run: python "Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing/automate_daffabalqis.py"
 
       - name: Print current working directory
         run: pwd
@@ -36,8 +36,8 @@ jobs:
       - name: Show root directory files after preprocessing
         run: ls -la
 
-      - name: Show files in Eksperimen_SML_Daffa Akifah Balqis/preprocessing folder
-        run: ls -la Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing
+      - name: Show files in Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing folder
+        run: ls -la Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing
 
       - name: Show git status
         run: git status
@@ -49,7 +49,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing/heart_preprocessed.csv
+          git add Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing/heart_preprocessed.csv
           git status
           git commit -m "Update preprocessed dataset from workflow" || echo "No changes to commit"
           git push || echo "No changes to push"
