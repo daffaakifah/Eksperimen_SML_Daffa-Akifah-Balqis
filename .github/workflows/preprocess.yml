@@ -28,39 +28,35 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
-        run: python "preprocessing/automate_daffabalqis.py"
-
-      - name: Print current working directory
-        run: pwd
-
-      - name: Show root directory files after preprocessing
-        run: ls -la
-
-      - name: Show files in preprocessing folder
-        run: ls -la preprocessing
-
-      # ** Tambahan steps pengecekan file, status git, commit dan push **
-      - name: Check preprocessed file existence and show some content
         run: |
+          python preprocessing/automate_daffabalqis.py
+
+      - name: Check if heart_preprocessed.csv exists
+        run: |
+          echo "Checking if file exists in preprocessing folder"
+          ls -l preprocessing/
           if [ -f preprocessing/heart_preprocessed.csv ]; then
-            echo "Preprocessed file found."
-            ls -l preprocessing/heart_preprocessed.csv
+            echo "File heart_preprocessed.csv exists!"
             head -n 5 preprocessing/heart_preprocessed.csv
           else
-            echo "Preprocessed file NOT found!"
+            echo "File heart_preprocessed.csv NOT FOUND!"
             exit 1
           fi
 
-      - name: Show git status and staged files before commit
-        run: |
-          git status
-          git diff --name-only --cached
+      - name: Show git status before adding file
+        run: git status
+
+      - name: Add preprocessed file forced (-f)
+        run: git add -f preprocessing/heart_preprocessed.csv
+
+      - name: Show git status after adding file
+        run: git status
 
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add -f preprocessing/heart_preprocessed.csv
-          git status
-          git commit -m "Update preprocessed dataset from workflow" || echo "No changes to commit"
-          git push || echo "No changes to push"
+          git commit -m "Add preprocessed heart dataset" || echo "No changes to commit"
+          git push origin main || echo "No changes to push"
