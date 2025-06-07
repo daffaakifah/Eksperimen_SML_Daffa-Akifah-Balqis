@@ -28,7 +28,7 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
-        run: python "Eksperimen_SML_Daffa Akifah Balqis/preprocessing/automate_daffabalqis.py"
+        run: python Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing/automate_daffabalqis.py
 
       - name: Print current working directory
         run: pwd
