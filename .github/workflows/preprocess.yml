@@ -9,61 +9,50 @@ on:
 jobs:
   preprocess:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+    - name: Checkout repo
+      uses: actions/checkout@v3
 
-      - name: Download Dataset
-        run: |
-          mkdir -p preprocessing
-          curl -o heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
+    - name: Download Dataset heart.csv ke root repo
+      run: |
+        curl -o heart.csv https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv
 
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.12.7"
+    - name: Setup Python 3.12.7
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12.7
 
-      - name: Install dependencies
-        run: |
-          pip install pandas scikit-learn
+    - name: Install dependencies
+      run: |
+        pip install pandas scikit-learn
 
-      - name: Run preprocessing script
-        run: |
-          echo "Isi folder sebelum preprocessing:"
-          ls -l preprocessing/
-          python preprocessing/automate_daffabalqis.py
-          echo "Isi folder setelah preprocessing:"
-          ls -l preprocessing/
+    - name: Run preprocessing script automate_daffabalqis.py
+      run: |
+        python preprocessing/automate_daffabalqis.py
 
-      - name: Verify processed file
-        run: |
-          echo "Isi folder preprocessing:"
-          ls -lh preprocessing/
-          if [ -f preprocessing/heart_preprocessed.csv ]; then
-            echo "File ditemukan!"
-            head -n 5 preprocessing/heart_preprocessed.csv
-          else
-            echo "ERROR: File heart_preprocessed.csv tidak ditemukan!"
-            find . -name heart_preprocessed.csv
-            exit 1
-          fi
+    - name: Verify output heart_preprocessed.csv exists
+      run: |
+        echo "Listing files in preprocessing folder:"
+        ls -l preprocessing/
+        if [ -f preprocessing/heart_preprocessed.csv ]; then
+          echo "File found! Showing first 5 lines:"
+          head -n 5 preprocessing/heart_preprocessed.csv
+        else
+          echo "File preprocessing/heart_preprocessed.csv NOT FOUND!"
+          exit 1
+        fi
 
-      - name: Show git status before adding file
-        run: git status
+    - name: Prepare git config
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
 
-      - name: Add preprocessed file forced (-f)
-        run: git add -f preprocessing/heart_preprocessed.csv
-
-      - name: Show git status after adding file
-        run: git status
-
-      - name: Commit and push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-          git commit -m "Add preprocessed heart dataset" || echo "No changes to commit"
-          git push origin main || echo "No changes to push"
+    - name: Add preprocessing output file, commit and push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git add -f preprocessing/heart_preprocessed.csv
+        git status
+        git commit -m "Add/update heart_preprocessed.csv after preprocessing" || echo "No changes to commit"
+        git push origin main || echo "Nothing to push"
