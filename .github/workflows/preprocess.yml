@@ -12,51 +12,44 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Penting untuk operasi git berikutnya
 
       - name: Download Dataset
         run: |
-          curl -o heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
+          curl -o preprocessing/heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
 
-      - name: Setup Python 3.12.7
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.12.7
+          python-version: "3.12.7"
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
+        working-directory: ./preprocessing 
         run: |
-          python preprocessing/automate_daffabalqis.py
+          python automate_daffabalqis.py
 
-      - name: Check if heart_preprocessed.csv exists
+      - name: Verify processed file
         run: |
-          echo "Checking if file exists in preprocessing folder"
-          ls -l preprocessing/
-          if [ -f preprocessing/heart_preprocessed.csv ]; then
-            echo "File heart_preprocessed.csv exists!"
-            head -n 5 preprocessing/heart_preprocessed.csv
-          else
-            echo "File heart_preprocessed.csv NOT FOUND!"
-            exit 1
-          fi
+          echo "Isi folder preprocessing:"
+          ls -lh preprocessing/
+          [ -f preprocessing/heart_preprocessed.csv ] || exit 1
 
-      - name: Show git status before adding file
-        run: git status
-
-      - name: Add preprocessed file forced (-f)
-        run: git add -f preprocessing/heart_preprocessed.csv
-
-      - name: Show git status after adding file
-        run: git status
-
-      - name: Commit and push changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git commit -m "Add preprocessed heart dataset" || echo "No changes to commit"
-          git push origin main || echo "No changes to push"
+          git add preprocessing/
+          git status
+          git commit -m "Add preprocessed dataset" || echo "No changes to commit"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          force: true
