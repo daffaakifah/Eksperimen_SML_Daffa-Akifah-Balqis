@@ -20,7 +20,7 @@ jobs:
       - name: Setup Python 3.12.7
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: 3.12.7
 
       - name: Install dependencies
         run: |
@@ -28,7 +28,7 @@ jobs:
           pip install pandas scikit-learn
 
       - name: Run preprocessing script
-        run: python "Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing/automate_daffabalqis.py"
+        run: python "/home/runner/work/Eksperimen_SML_Daffa-Akifah-Balqis/Eksperimen_SML_Daffa-Akifah-Balqis/Eksperimen_SML_DaffaAkifahBalqis/preprocessing/automate_daffabalqis.py"
 
       - name: Print current working directory
         run: pwd
