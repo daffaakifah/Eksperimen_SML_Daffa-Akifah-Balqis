@@ -8,7 +8,6 @@ Fungsi utama:
 
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
-import os 
 
 def preprocess_data(filepath: str) -> pd.DataFrame:
     """
@@ -29,13 +28,8 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
     input_path = "heart.csv"  # atau folder/heart.csv yang sesuai lokasi file
-    output_dir = "preprocessing"
-    output_path = os.path.join(output_dir, "heart_preprocessed.csv")
-    
-    df_processed = preprocess_data(input_path)
+    output_path = "preprocessing/heart_preprocessed.csv"
+    df_preprocessed.to_csv(output_path, index=False)
+    print(f"Hasil preprocessing tersimpan di: {output_path}")
 
-    os.makedirs(output_dir, exist_ok=True)
-    df_processed.to_csv(output_path, index=False)
-
-    print(f"Preprocessing selesai. Dataset hasil preprocess disimpan di: {output_path}")
 
