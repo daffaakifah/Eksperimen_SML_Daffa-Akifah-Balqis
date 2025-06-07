@@ -6,13 +6,11 @@ Fungsi utama:
 - preprocess_data(filepath): menerima path csv dataset raw, menghapus duplikat, melakukan scaling, dan mengembalikan DataFrame hasil preprocess.
 """
 
+import os
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
 def preprocess_data(filepath: str) -> pd.DataFrame:
-    """
-    Membaca dataset csv, hapus duplikat, lakukan scaling fitur numerik, kembalikan DataFrame siap train.
-    """
     df = pd.read_csv(filepath)
     df_clean = df.drop_duplicates().reset_index(drop=True)
     
@@ -30,10 +28,11 @@ if __name__ == "__main__":
     input_path = "heart.csv"  # Path dataset raw
     output_path = "preprocessing/heart_preprocessed.csv"
 
-    # Panggil fungsi preprocess_data, dapatkan dataframe hasil preprocessing
-    df_preprocessed = preprocess_data(input_path)
+    # Ensure the preprocessing directory exists
+    os.makedirs("preprocessing", exist_ok=True)
 
-    # Simpan dataframe hasil preprocessing ke file CSV
+    # Preprocess the data and save the output
+    df_preprocessed = preprocess_data(input_path)
     df_preprocessed.to_csv(output_path, index=False)
     print(f"Hasil preprocessing tersimpan di: {output_path}")
 
