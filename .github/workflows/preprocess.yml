@@ -1,0 +1,55 @@
+name: Preprocessing Dataset
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Download Dataset
+        run: |
+          curl -o heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/refs/heads/main/heart.csv"
+
+      - name: Setup Python 3.12.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas scikit-learn
+
+      - name: Run preprocessing script
+        run: python "Eksperimen_SML_Daffa Akifah Balqis/preprocessing/automate_daffabalqis.py"
+
+      - name: Print current working directory
+        run: pwd
+
+      - name: Show root directory files after preprocessing
+        run: ls -la
+
+      - name: Show files in Eksperimen_SML_Daffa Akifah Balqis/preprocessing folder
+        run: ls -la Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing
+
+      - name: Show git status
+        run: git status
+
+      - name: Show staged files before commit
+        run: git diff --staged --name-only
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add Eksperimen_SML_Daffa\ Akifah\ Balqis/preprocessing/heart_preprocessed.csv
+          git status
+          git commit -m "Update preprocessed dataset from workflow" || echo "No changes to commit"
+          git push || echo "No changes to push"
