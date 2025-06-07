@@ -18,7 +18,7 @@ jobs:
       - name: Download Dataset
         run: |
           mkdir -p preprocessing 
-          curl -o preprocessing/heart.csv "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
+          curl -o "https://raw.githubusercontent.com/daffaakifah/Eksperimen_SML_Daffa-Akifah-Balqis/main/heart.csv"
 
       - name: Setup Python
         uses: actions/setup-python@v4
