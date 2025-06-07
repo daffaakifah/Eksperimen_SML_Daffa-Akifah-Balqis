@@ -36,8 +36,8 @@ jobs:
       - name: Show root directory files after preprocessing
         run: ls -la
 
-      - name: Show files in Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing folder
-        run: ls -la Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing
+      - name: Show files in preprocessing folder
+        run: ls -la preprocessing
 
       - name: Show git status
         run: git status
@@ -49,7 +49,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add Eksperimen_SML_Daffa-Akifah-Balqis/preprocessing/heart_preprocessed.csv
+          git add preprocessing/heart_preprocessed.csv
           git status
           git commit -m "Update preprocessed dataset from workflow" || echo "No changes to commit"
           git push || echo "No changes to push"
