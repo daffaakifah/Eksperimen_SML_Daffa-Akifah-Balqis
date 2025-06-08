@@ -31,15 +31,15 @@ jobs:
       run: |
         python preprocessing/automate_daffabalqis.py
 
-    - name: Verify output heart_preprocessed.csv exists
+    - name: Verify output heart_preprocessing.csv exists
       run: |
         echo "Listing files in preprocessing folder:"
         ls -l preprocessing/
-        if [ -f preprocessing/heart_preprocessed.csv ]; then
+        if [ -f preprocessing/heart_preprocessing.csv ]; then
           echo "File found! Showing first 5 lines:"
-          head -n 5 preprocessing/heart_preprocessed.csv
+          head -n 5 preprocessing/heart_preprocessing.csv
         else
-          echo "File preprocessing/heart_preprocessed.csv NOT FOUND!"
+          echo "File preprocessing/heart_preprocessing.csv NOT FOUND!"
           exit 1
         fi
 
@@ -52,7 +52,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        git add -f preprocessing/heart_preprocessed.csv
+        git add -f preprocessing/heart_preprocessing.csv
         git status
-        git commit -m "Add/update heart_preprocessed.csv after preprocessing" || echo "No changes to commit"
+        git commit -m "Add/update heart_preprocessing.csv after preprocessing" || echo "No changes to commit"
         git push origin main || echo "Nothing to push"
