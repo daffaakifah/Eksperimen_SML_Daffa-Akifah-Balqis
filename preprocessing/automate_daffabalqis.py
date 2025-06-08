@@ -25,7 +25,7 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
     input_path = "heart.csv"  # Sesuai lokasi download dataset di workflow
-    output_path = "preprocessing/heart_preprocessed.csv"  # Simpan di folder preprocessing
+    output_path = "preprocessing/heart_preprocessing.csv"  # Simpan di folder preprocessing
 
     df_preprocessed = preprocess_data(input_path)
     df_preprocessed.to_csv(output_path, index=False)
