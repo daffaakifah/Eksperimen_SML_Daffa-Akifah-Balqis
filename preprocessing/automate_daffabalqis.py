@@ -3,10 +3,12 @@
 """
 File ini berisi fungsi otomatisasi preprocessing dataset Heart Disease UCI sesuai notebook eksperimen manual.
 Fungsi utama:
-- preprocess_data(filepath): menerima path csv dataset raw, menghapus duplikat, melakukan scaling, dan mengembalikan DataFrame hasil preprocess.
+- preprocess_data(filepath): menerima path csv dataset raw, menghapus duplikat, melakukan preprocessing dengan pipeline, dan mengembalikan DataFrame hasil preprocess.
 """
 
 import pandas as pd
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 
 def preprocess_data(filepath: str) -> pd.DataFrame:
@@ -16,12 +18,17 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
     X = df_clean.drop(columns=["target"])
     y = df_clean["target"]
     
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-    df_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+    # Membuat pipeline preprocessing, sesuai contoh notebook eksperimen
+    numeric_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='median')),
+        ('scaler', StandardScaler())
+    ])
     
-    df_processed = pd.concat([df_scaled, y.reset_index(drop=True)], axis=1)
-    return df_processed
+    X_processed = numeric_transformer.fit_transform(X)
+    df_processed = pd.DataFrame(X_processed, columns=X.columns)
+    
+    df_final = pd.concat([df_processed, y.reset_index(drop=True)], axis=1)
+    return df_final
 
 if __name__ == "__main__":
     input_path = "heart.csv"  # Sesuai lokasi download dataset di workflow
@@ -30,5 +37,3 @@ if __name__ == "__main__":
     df_preprocessed = preprocess_data(input_path)
     df_preprocessed.to_csv(output_path, index=False)
     print(f"Hasil preprocessing tersimpan di: {output_path}")
-
-
