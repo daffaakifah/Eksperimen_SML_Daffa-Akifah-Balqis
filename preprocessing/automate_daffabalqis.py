@@ -1,7 +1,6 @@
 # automate_daffabalqis.py
 
 """
-File ini berisi fungsi otomatisasi preprocessing dataset Heart Disease UCI sesuai notebook eksperimen manual.
 Fungsi utama:
 - preprocess_data(filepath): menerima path csv dataset raw, menghapus duplikat, melakukan preprocessing dengan pipeline, dan mengembalikan DataFrame hasil preprocess.
 """
