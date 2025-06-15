@@ -14,16 +14,22 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
     df = pd.read_csv(filepath)
     df_clean = df.drop_duplicates().reset_index(drop=True)
     
-    X = df_clean.drop(columns=["target"])
-    y = df_clean["target"]
+    numeric_features = df.columns.drop('target')
+    X = df[numeric_features]
+    y = df['target']
     
     # Membuat pipeline preprocessing
     numeric_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
         ('scaler', StandardScaler())
     ])
+
+    preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', numeric_transformer, numeric_features)
+    ])
     
-    X_processed = numeric_transformer.fit_transform(X)
+    X_processed = preprocessor.fit_transform(X)
     df_processed = pd.DataFrame(X_processed, columns=X.columns)
     
     df_final = pd.concat([df_processed, y.reset_index(drop=True)], axis=1)
