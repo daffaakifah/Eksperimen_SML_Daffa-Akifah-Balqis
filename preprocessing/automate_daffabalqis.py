@@ -18,7 +18,7 @@ def preprocess_data(filepath: str) -> pd.DataFrame:
     X = df_clean.drop(columns=["target"])
     y = df_clean["target"]
     
-    # Membuat pipeline preprocessing, sesuai contoh notebook eksperimen
+    # Membuat pipeline preprocessing
     numeric_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='median')),
         ('scaler', StandardScaler())
